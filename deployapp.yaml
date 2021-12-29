@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: pcl
+ labels:
+  app: pcl
+spec:
+ replicas: 3
+ strategy:
+  type: Recreate
+ selector:
+   matchLabels:
+    app: pcl
+ template:
+  metadata:
+   labels:
+    app: pcl
+  spec:
+   containers:
+   - name: pcl
+     image: oshokumar/pcl:3.0.80
+     command:
+     - java 
+     - "-jar"
+     - /usr/src/myapp/pcl.jar
+     env:
+     - name: MYSQL_URL
+       valueFrom:
+        secretKeyRef:
+         name: dbconnect
+         key: MYURL_RW
+     - name: MYSQL_USER
+       valueFrom:
+        secretKeyRef:
+         name: dbconnect
+         key: MYSQL_USER
+     - name: MYSQL_PASS
+       valueFrom:
+        secretKeyRef:
+         name: dbconnect
+         key: MYSQL_PASSWORD
+     ports:
+     - name: pcl
+       containerPort: 8080

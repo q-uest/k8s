@@ -1,0 +1,5 @@
+kind: Secret
+apiVersion: v1
+stringData:
+ foo: plain text
+data:
